@@ -48,10 +48,13 @@ async function run() {
       const id = req.params.id;
       const newdata = req.body;
       const query = { _id: ObjectId(id) };
-      const product = await Products.findOneAndUpdate([
-        { _query },
-        { $set: { quantity: newdata } },
-      ]);
+      const options = { upsert: true };
+      const updateQty = {
+        $set: {
+          quantity: newdata.quantity,
+        },
+      };
+      const product = await Products.updateOne(query, updateQty, options);
 
       res.send(product);
     });
