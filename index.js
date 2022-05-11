@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { MongoClient, ObjectId } = require("mongodb");
-
+require("dotenv").config();
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -14,8 +14,7 @@ app.listen(port, () => {
   console.log(port);
 });
 
-const uri =
-  "mongodb+srv://dbAlaeze:Alaeze@cluster0.lhcdr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.dBname}:${process.env.dBpass}@cluster0.lhcdr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri);
 
@@ -42,6 +41,12 @@ async function run() {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const product = await Products.findOne(query);
+      res.send(product);
+    });
+    app.delete("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const product = await Products.deleteOne(query);
       res.send(product);
     });
 
