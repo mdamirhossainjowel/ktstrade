@@ -44,6 +44,16 @@ async function run() {
       const product = await Products.findOne(query);
       res.send(product);
     });
+    app.get("/users", async (req, res) => {
+      // const query = { seller: ObjectId(id) };
+      const user = req.body;
+      const cursor = Products.find({
+        userItem: user,
+      });
+      const products = await cursor.toArray();
+      res.send(products);
+    });
+
     app.put("/product/:id", async (req, res) => {
       const id = req.params.id;
       const newdata = req.body;
