@@ -44,11 +44,10 @@ async function run() {
       const product = await Products.findOne(query);
       res.send(product);
     });
+
     app.get("/users", async (req, res) => {
-      // const query = { seller: ObjectId(id) };
-      const user = req.body;
       const cursor = Products.find({
-        userItem: user,
+        userItem: `${req.headers.authorization}`,
       });
       const products = await cursor.toArray();
       res.send(products);
